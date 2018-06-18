@@ -74,7 +74,7 @@ impl MmapInner {
         MmapInner::new(
             len,
             libc::PROT_READ,
-            libc::MAP_PRIVATE|MAP_POPULATE,
+            libc::MAP_SHARED|libc::MAP_POPULATE,
             file.as_raw_fd(),
             offset
         )
