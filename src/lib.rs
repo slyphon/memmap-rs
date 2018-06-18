@@ -31,6 +31,7 @@ pub struct MmapOptions {
     offset: usize,
     len: Option<usize>,
     stack: bool,
+    populate: bool
 }
 
 impl MmapOptions {
@@ -155,6 +156,11 @@ impl MmapOptions {
         self
     }
 
+    pub fn populate(&mut self) -> &mut Self {
+        self.populate = true;
+        self
+    }
+
     /// Creates a read-only memory map backed by a file.
     ///
     /// # Errors
@@ -186,6 +192,10 @@ impl MmapOptions {
     /// ```
     pub unsafe fn map(&self, file: &File) -> Result<Mmap> {
         MmapInner::map(self.get_len(file)?, file, self.offset).map(|inner| Mmap { inner: inner })
+    }
+
+    pub unsafe fn map_private(&self, file: &File) -> Result<Mmap> {
+        MmapInner::map_private(self.get_len(file)?, file, self.offset).map(|inner| Mmap { inner: inner })
     }
 
     /// Creates a readable and executable memory map backed by a file.
